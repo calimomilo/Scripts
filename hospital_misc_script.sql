@@ -1,0 +1,11 @@
+DROP TABLE prescription;
+DROP TABLE medicament;
+DROP TABLE rdv;
+DROP TABLE patient;
+DROP TABLE medecin;
+DROP TABLE assurance;
+DROP TABLE specialite;
+DROP TABLE personne;
+DROP TYPE "type";
+DROP TYPE "motif";
+DROP TYPE "sexe";
