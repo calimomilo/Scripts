@@ -25,7 +25,9 @@ COPY temp_maj_patient
 FROM 'C:\Users\paula\Desktop\General\5. HEIG-VD\Semestre 2\InfraDon\hopital_data\csv\hopital_dataset_assurances_sexe_adresse.csv'
 (format CSV, HEADER);
 
-INSERT INTO patient (person_id, assurance, complementaire)
+INSERT INTO patient (personne_id, assurance, complementaire)
 SELECT tmp.id_patient, a.id, (tmp.assurance LIKE '%+ complémentaire')
 FROM temp_maj_patient tmp
-INNER JOIN assurance a ON a.nom = split_part(tmp.assurance, ' +', 1);
+INNER JOIN assurance a ON a.nom = split_part(tmp.assurance, ' +', 1)
+ON CONFLICT (personne_id)
+DO NOTHING;

@@ -1,3 +1,5 @@
+-- CREATION ENUM
+
 CREATE TYPE "sexe" AS ENUM (
   'Homme',
   'Femme',
@@ -20,6 +22,8 @@ CREATE TYPE "type" AS ENUM (
   'Injection'
 );
 
+-- CREATION TABLES
+
 CREATE TABLE "personne" (
   "id" serial PRIMARY KEY,
   "nom" varchar(255) NOT NULL,
@@ -33,7 +37,7 @@ CREATE TABLE "personne" (
 
 CREATE TABLE "patient" (
   "id" serial PRIMARY KEY,
-  "person_id" integer NOT NULL,
+  "personne_id" integer NOT NULL,
   "assurance" integer NOT NULL,
   "complementaire" boolean NOT NULL,
   "created_at" timestamp
@@ -41,7 +45,7 @@ CREATE TABLE "patient" (
 
 CREATE TABLE "medecin" (
   "id" serial PRIMARY KEY,
-  "person_id" integer NOT NULL,
+  "personne_id" integer NOT NULL,
   "specialite_id" integer NOT NULL,
   "hopital" varchar(255) NOT NULL,
   "created_at" timestamp
@@ -86,13 +90,15 @@ CREATE TABLE "assurance" (
   "created_at" timestamp
 );
 
-ALTER TABLE "patient" ADD FOREIGN KEY ("person_id") REFERENCES "personne" ("id");
+-- AJOUT FOREIGN KEYS
+
+ALTER TABLE "patient" ADD FOREIGN KEY ("personne_id") REFERENCES "personne" ("id");
 
 ALTER TABLE "patient" ADD FOREIGN KEY ("assurance") REFERENCES "assurance" ("id");
 
-ALTER TABLE "medecin" ADD FOREIGN KEY ("person_id") REFERENCES "personne" ("id");
+ALTER TABLE "medecin" ADD FOREIGN KEY ("personne_id") REFERENCES "personne" ("id");
 
-ALTER TABLE "medecin" ADD FOREIGN KEY ("spécialite_id") REFERENCES "specialite" ("id");
+ALTER TABLE "medecin" ADD FOREIGN KEY ("specialite_id") REFERENCES "specialite" ("id");
 
 ALTER TABLE "rdv" ADD FOREIGN KEY ("patient_id") REFERENCES "patient" ("id");
 
@@ -101,3 +107,27 @@ ALTER TABLE "rdv" ADD FOREIGN KEY ("medecin_id") REFERENCES "medecin" ("id");
 ALTER TABLE "prescription" ADD FOREIGN KEY ("rdv_id") REFERENCES "rdv" ("id");
 
 ALTER TABLE "prescription" ADD FOREIGN KEY ("medicament_id") REFERENCES "medicament" ("id");
+
+-- AJOUT CONTRAINTES
+
+ALTER TABLE personne ADD UNIQUE (nom, prenom, date_naissance);
+
+ALTER TABLE patient ADD UNIQUE (personne_id);
+
+ALTER TABLE medecin ADD UNIQUE (personne_id);
+
+ALTER TABLE assurance ADD UNIQUE (nom);
+
+ALTER TABLE specialite ADD UNIQUE (nom);
+
+ALTER TABLE rdv ADD UNIQUE (medecin_id, date_rdv);
+
+--ALTER TABLE rdv ADD CONSTRAINT check_premier_rdv CHECK (premier_rdv AND date_rdv = ???);
+
+--ALTER TABLE rdv ADD CONSTRAINT check_operation_mineur CHECK (motif = 'Opération' AND ???);
+
+--ALTER TABLE prescription ADD CONSTRAINT check_start CHECK (presc_start = ???);
+
+ALTER TABLE prescription ADD CONSTRAINT check_duree CHECK (presc_end < presc_start + interval '1 year');
+
+ALTER TABLE medicament ADD UNIQUE (nom, dosage, type);

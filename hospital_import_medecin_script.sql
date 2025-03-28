@@ -13,7 +13,7 @@ COPY temp_medecin
 FROM 'C:\Users\paula\Desktop\General\5. HEIG-VD\Semestre 2\InfraDon\hopital_data\csv\hopital_dataset_medecins.csv'
 (format CSV, HEADER);
 
-INSERT INTO medecin(person_id, specialite_id, hopital)
+INSERT INTO medecin(personne_id, specialite_id, hopital)
 SELECT tm.id, sp.id, tm.hopital
 FROM temp_medecin tm
 INNER JOIN specialite sp ON sp.nom = tm.specialite;
