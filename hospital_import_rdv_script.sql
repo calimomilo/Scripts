@@ -20,6 +20,7 @@ SELECT tr.id, p.id, m.id, to_date(tr.date_rdv, 'DD/MM/YYYY'), tr.motif::motif, (
 FROM temp_rdv tr
 INNER JOIN patient p ON tr.patient_id = p.personne_id
 INNER JOIN medecin m ON tr.medecin_id = m.personne_id
-WHERE tr.id <> 5176
 ON CONFLICT (medecin_id, date_rdv)
 DO NOTHING;
+
+DELETE FROM rdv;
