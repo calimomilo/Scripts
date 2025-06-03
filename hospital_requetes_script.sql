@@ -24,7 +24,7 @@ ORDER BY rdv DESC
 LIMIT 1;
 
 
-
+-- celle là c'était juste des essais il faut pas la présenter
 SELECT nom, MAX(counter)
 FROM (
     SELECT sp.nom, COUNT(*) AS counter
