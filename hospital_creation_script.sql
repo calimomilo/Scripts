@@ -124,14 +124,6 @@ ALTER TABLE rdv ADD UNIQUE (medecin_id, date_rdv);
 
 ALTER TABLE rdv ADD UNIQUE (patient_id, date_rdv);
 
---ALTER TABLE rdv ADD CONSTRAINT check_premier_rdv CHECK (premier_rdv AND date_rdv = ???); => fait à l'insertion
-
---ALTER TABLE rdv ADD CONSTRAINT check_operation_mineur CHECK (motif = 'Opération' AND ???); => check_integrity
-
---ALTER TABLE prescription ADD CONSTRAINT check_start CHECK (presc_start = ???); => fait à l'insertion
-
 ALTER TABLE prescription ADD CONSTRAINT check_duree CHECK (presc_start < presc_end AND presc_end < presc_start + interval '1 year');
-
-ALTER TABLE prescription ADD CONSTRAINT  
 
 ALTER TABLE medicament ADD UNIQUE (nom, dosage, type);
