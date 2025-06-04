@@ -1,3 +1,19 @@
+-- Pas de rdv avant celui marqué premier rdv
+INSERT INTO rdv(patient_id, medecin_id, date_rdv, motif, premier_rdv)
+VALUES (2, 5, '2025-01-01', 'Suivi', FALSE);
+SELECT r.id, patient_id, p.prenom, p.nom, date_rdv, premier_rdv
+FROM rdv r
+INNER JOIN patient pat ON r.patient_id = pat.id
+INNER JOIN personne p ON pat.personne_id = p.id
+WHERE premier_rdv <> (
+    (pat.id, date_rdv) IN (
+    SELECT patient_id, MIN(date_rdv)
+    FROM rdv
+    GROUP BY patient_id
+    )
+);
+
+-- Pas d'opérations pour les mineurs
 SELECT r.id, per.date_naissance, r.date_rdv, r.motif
 FROM rdv r
 INNER JOIN patient p ON r.patient_id = p.id
@@ -12,6 +28,7 @@ DELETE FROM rdv WHERE id IN (
     WHERE per.date_naissance + INTERVAL '18 years' > r.date_rdv AND r.motif = 'Opération'
 );
 
+-- étapes pour la suivante
 SELECT p.nom, p.prenom, COUNT(*) AS nombre
 FROM medecin m
 INNER JOIN personne p ON m.personne_id = p.id
@@ -28,8 +45,9 @@ FROM (
 )
 WHERE nombre > 1;
 
+-- médecins avec le même nom mais des spécialités différentes
 INSERT INTO personne(nom, prenom, telephone, adresse)
-VALUES ('Roach', 'Jesse', 'esdofijwoe', 'doicjseoi');
+VALUES ('Roach', 'Jesse', 'téléphone', 'adresse');
 INSERT INTO medecin(personne_id, specialite_id, hopital)
 VALUES (1, 4, 'Jimenez Ltd');
 
@@ -49,7 +67,7 @@ WHERE (p.nom, p.prenom) IN (
     WHERE nombre > 1
 );
 
-
+-- patients avec des rdv qui se chevauchent
 INSERT INTO rdv(patient_id, medecin_id, date_rdv, motif, premier_rdv)
 VALUES (2, 8, '2025-02-19', 'Consultation', false);
 
