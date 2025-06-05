@@ -1,6 +1,9 @@
+
+
 -- Pas de rdv avant celui marqué premier rdv
 INSERT INTO rdv(patient_id, medecin_id, date_rdv, motif, premier_rdv)
 VALUES (2, 5, '2025-01-01', 'Suivi', FALSE);
+
 SELECT r.id, patient_id, p.prenom, p.nom, date_rdv, premier_rdv
 FROM rdv r
 INNER JOIN patient pat ON r.patient_id = pat.id
