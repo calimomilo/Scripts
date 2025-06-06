@@ -25,4 +25,23 @@ SET premier_rdv = TRUE
 WHERE (patient_id, date_rdv) IN (
 	SELECT patient_id, MIN(date_rdv)
 	FROM rdv
-	GROUP BY patient_id)
+	GROUP BY patient_id
+);
+
+SELECT *
+FROM temp_rdv
+WHERE patient_id NOT IN (
+	SELECT id 
+	FROM personne
+);
+SELECT *
+FROM temp_rdv
+WHERE medecin_id NOT IN (
+	SELECT id
+	FROM personne
+);
+
+SELECT medecin_id, date_rdv, COUNT(*)
+FROM temp_rdv
+GROUP BY (medecin_id, date_rdv)
+ORDER BY COUNT(*) DESC;

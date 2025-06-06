@@ -26,8 +26,24 @@ FROM 'C:\Users\paula\Desktop\General\5. HEIG-VD\Semestre 2\InfraDon\hopital_data
 (format CSV, HEADER);
 
 INSERT INTO personne (id, nom, prenom, telephone, sexe, adresse, date_naissance)
-SELECT tp.id, tp.nom, tp.prenom, tp.telephone, tmp.sexe::sexe, tmp.adresse_corrigee, to_date(tp.date_naissance, 'DD/MM/YYYY')
+SELECT DISTINCT tp.id, tp.nom, tp.prenom, tp.telephone, tmp.sexe::sexe, tmp.adresse_corrigee, to_date(tp.date_naissance, 'DD/MM/YYYY')
 FROM temp_patient tp
-INNER JOIN temp_maj_patient tmp ON tp.id = tmp.id_patient
-ON CONFLICT (id)
-DO NOTHING;
+INNER JOIN temp_maj_patient tmp ON tp.id = tmp.id_patient;
+
+SELECT id, COUNT(*)
+FROM temp_patient
+GROUP BY id
+ORDER BY COUNT(*) DESC;
+
+SELECT *
+FROM temp_patient
+WHERE id NOT IN (
+    SELECT id 
+    FROM temp_maj_patient
+);
+SELECT *
+FROM temp_maj_patient
+WHERE id_patient NOT IN (
+    SELECT id 
+    FROM temp_patient
+);

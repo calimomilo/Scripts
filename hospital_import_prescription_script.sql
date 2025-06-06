@@ -15,3 +15,10 @@ INSERT INTO prescription (id, rdv_id, medicament_id, presc_start, presc_end)
 SELECT tp.id, tp.rdv_id, tp.medicament_id, r.date_rdv, (r.date_rdv + duree)
 FROM temp_prescription tp
 INNER JOIN rdv r ON tp.rdv_id = r.id;
+
+SELECT *
+FROM temp_prescription
+WHERE rdv_id NOT IN (
+    SELECT id 
+    FROM rdv
+);

@@ -26,8 +26,13 @@ FROM 'C:\Users\paula\Desktop\General\5. HEIG-VD\Semestre 2\InfraDon\hopital_data
 (format CSV, HEADER);
 
 INSERT INTO patient (personne_id, assurance, complementaire)
-SELECT tmp.id_patient, a.id, (tmp.assurance LIKE '%+ complémentaire')
+SELECT DISTINCT tmp.id_patient, a.id, (tmp.assurance LIKE '%+ complémentaire')
 FROM temp_maj_patient tmp
-INNER JOIN assurance a ON a.nom = split_part(tmp.assurance, ' +', 1)
-ON CONFLICT (personne_id)
-DO NOTHING;
+INNER JOIN assurance a ON a.nom = split_part(tmp.assurance, ' +', 1);
+
+SELECT *
+FROM temp_maj_patient
+WHERE split_part(assurance, ' +', 1) NOT IN (
+    SELECT nom
+    FROM assurance
+);

@@ -25,6 +25,24 @@ FROM 'C:\Users\paula\Desktop\General\5. HEIG-VD\Semestre 2\InfraDon\hopital_data
 (format CSV, HEADER);
 
 INSERT INTO personne(id, nom, prenom, telephone, sexe, adresse)
-SELECT tm.id, tm.nom, tm.prenom, tm.telephone, tmm.sexe::sexe, tmm.adresse_hopital
+SELECT DISTINCT tm.id, tm.nom, tm.prenom, tm.telephone, tmm.sexe::sexe, tmm.adresse_hopital
 FROM temp_medecin tm
 INNER JOIN temp_maj_medecin tmm ON tm.id = tmm.id_medecin;
+
+SELECT id, COUNT(*)
+FROM temp_medecin
+GROUP BY id
+ORDER BY COUNT(*) DESC;
+
+SELECT *
+FROM temp_medecin
+WHERE id NOT IN (
+    SELECT id 
+    FROM temp_maj_medecin
+);
+SELECT *
+FROM temp_maj_medecin
+WHERE id_medecin NOT IN (
+    SELECT id 
+    FROM temp_medecin
+);

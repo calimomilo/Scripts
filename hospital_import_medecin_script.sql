@@ -17,3 +17,10 @@ INSERT INTO medecin(personne_id, specialite_id, hopital)
 SELECT tm.id, sp.id, tm.hopital
 FROM temp_medecin tm
 INNER JOIN specialite sp ON sp.nom = tm.specialite;
+
+SELECT *
+FROM temp_medecin
+WHERE specialite NOT IN (
+    SELECT nom 
+    FROM specialite
+);
