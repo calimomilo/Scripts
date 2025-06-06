@@ -12,5 +12,10 @@ FROM 'C:\Users\paula\Desktop\General\5. HEIG-VD\Semestre 2\InfraDon\hopital_data
 (format CSV, HEADER);
 
 INSERT INTO medicament (id, nom, dosage, type)
-SELECT id, nom, dosage, type_medicament::TYPE
+SELECT DISTINCT id, nom, dosage, type_medicament::TYPE
 FROM temp_medicament;
+
+SELECT id, COUNT(*)
+FROM temp_rdv
+GROUP BY id
+ORDER BY COUNT(*) DESC;
